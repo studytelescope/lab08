@@ -17,9 +17,12 @@ $ open https://docs.docker.com/get-started/
 
 ## Tutorial
 
+Set up global variables
+
 ```sh
 $ export GITHUB_USERNAME=<имя_пользователя> # set username
 ```
+Configure surrounding
 
 ```sh
 # set environment
@@ -27,6 +30,9 @@ $ cd ${GITHUB_USERNAME}/workspace
 $ pushd .
 $ source scripts/activate
 ```
+
+Get new repo on the basis of the previous one
+Also add submodule
 
 ```sh
 $ git clone https://github.com/${GITHUB_USERNAME}/lab07 lab08 # get previous lab as a template
@@ -47,12 +53,17 @@ $ git remote remove origin
 $ git remote add origin https://github.com/${GITHUB_USERNAME}/lab08
 ```
 
+Initialize Dockerfile
+Set up ubuntu version
+
 ```sh
 # base image
 $ cat > Dockerfile <<EOF
 FROM ubuntu:18.04
 EOF
 ```
+
+Add executable commands
 
 ```sh
 # update initial packets and install compiler
@@ -63,6 +74,8 @@ RUN apt install -yy gcc g++ cmake
 EOF
 ```
 
+Set word dir
+
 ```sh
 # copy current dir to print/
 $ cat >> Dockerfile <<EOF
@@ -71,6 +84,7 @@ COPY . print/
 WORKDIR print
 EOF
 ```
+Set build Instructions
 
 ```sh
 # make execute cmake targets
@@ -82,21 +96,23 @@ RUN cmake --build _build --target install
 EOF
 ```
 
+Set log
+
 ```sh
 # set new env variable
 $ cat >> Dockerfile <<EOF
 
 ENV LOG_PATH /home/logs/log.txt
 EOF
-```
 
-```sh
 # set a place of files storing
 $ cat >> Dockerfile <<EOF
 
 VOLUME /home/logs
 EOF
 ```
+
+Set up work dir
 
 ```sh
 # set new work dir
@@ -106,6 +122,8 @@ WORKDIR _install/bin
 EOF
 ```
 
+Sst up point of entry
+
 ```sh
 # set the point of entry
 $ cat >> Dockerfile <<EOF
@@ -113,6 +131,7 @@ $ cat >> Dockerfile <<EOF
 ENTRYPOINT ./demo
 EOF
 ```
+Build and run all via Docker
 
 ```sh
 # build all
@@ -131,6 +150,8 @@ Successfully built 6c16d4af4878
 Successfully tagged logger:latest
 ```
 
+Show all the images
+
 ```sh
 # which images do we have?
 $ docker images
@@ -138,6 +159,8 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 logger              latest              db2086b06c88        4 minutes ago       344MB
 ubuntu              18.04               4e5021d210f6        4 weeks ago         64.2MB
 ```
+
+Move logs to container
 
 ```sh
 $ mkdir logs
@@ -148,12 +171,14 @@ text2
 text3
 <C-D>
 
-$ cat logs/log.txt 
+$ cat logs/log.txt  # check logs
 text1
 text2
 text3
 <C-D>
 ```
+
+Show existing logs
 
 ```sh
 # provide detailed information on constructs controlled by Docker
@@ -281,9 +306,7 @@ text3
 <C-D>
 ```
 
-```sh
-$ gsed -i 's/lab07/lab08/g' README.md
-```
+Update Travis  
 
 ```sh
 # create new travis instruction
@@ -297,6 +320,8 @@ script:
 :wq
 ```
 
+Commit and push all changes
+
 ```sh
 # blablabla
 $ git add Dockerfile
@@ -308,6 +333,8 @@ $ git commit -m"adding Dockerfile"
 
 $ git push origin master
 ```
+
+Set up Travis preferences
 
 ```sh
 $ travis login --auto
